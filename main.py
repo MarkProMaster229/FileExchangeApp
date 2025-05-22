@@ -7,7 +7,7 @@ store = UserRegistration()
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = 'секретный_ключ'  # обязательно нужен для работы session
+app.secret_key = 'секретный_ключ'
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -16,7 +16,7 @@ def start():
         name = request.form.get('name')
         password = request.form.get('password')
 
-        # сохраняем во временную сессию
+
         session['name'] = name
         session['password'] = password
 
@@ -42,7 +42,7 @@ def file():
     baket = Backet()
     baketName = "mybucket"
 
-    file = None  # <- объявляем заранее
+    file = None
 
     if request.method == 'POST':
         file = request.files.get('file')

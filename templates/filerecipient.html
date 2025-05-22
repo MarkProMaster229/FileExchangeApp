@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Файлообменник</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
     <link rel="stylesheet" href="{{ url_for('static', filename='osnova.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Файлообменник</h1>
+<div class = "container">
+    <div class = "header">
+        <img src="{{ url_for('static', filename='Newimg/logo.png') }}">
+        <h1>Lumo</h1>
 
-        <!-- Форма загрузки -->
-        <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <button type="submit">Загрузить</button>
-        </form>
+    </div>
+
+    <div class="filesDowload">
+           <form class="upload-form" method="POST" enctype="multipart/form-data">
+               <input type="file" name="file">
+               <button type="submit">Загрузить</button>
+            </form>
+
 
         <!-- Список файлов -->
         {% if files %}
@@ -29,6 +35,12 @@
         {% else %}
             <p>Пока нет загруженных файлов</p>
         {% endif %}
+
     </div>
+
+</div>
+
+
+
 </body>
 </html>
