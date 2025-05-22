@@ -1,30 +1,16 @@
 from minio import Minio
-
-# Подключаемся
-client = Minio(
-    "localhost:9000",
-    access_key="minioadmin",
-    secret_key="minioadmin",
-    secure=False  # потому что http, не https
-)
-
-# Проверим, есть ли бакет (и создадим, если нужно)
-bucket_name = "mybucket"
-if not client.bucket_exists(bucket_name):
-    client.make_bucket(bucket_name)
-
-# Загружаем файл
-client.fput_object(
-    "mybucket",
-    "images/cat.jpg",
-    "/home/chelovek/Рабочий стол/deleteMe/Снимок экрана_20250501_153723.png"
-)
-# выгружаем файл
-client.fget_object(
-    "mybucket",
-    "images/cat.jpg",
-    "/home/chelovek/Рабочий стол/моя работа описание и скриншоты/cat.jpg "
-)
+from minio.error import S3Error
 
 
-print("Загрузка завершена!")
+class Backet:
+    def __init__(self, host="127.0.0.1:9000", access_key="minioadmin", secret_key="minioadmin", secure=False):
+        self.client = Minio(
+            host,
+            access_key=access_key,
+            secret_key=secret_key,
+            secure=secure
+        )
+    def fileup(self,bucked_name,username,password,filename, file_size, file_data):
+        objec = f"{username}/{password}/{filename}"
+        self.client.put_object(bucked_name, objec, file_data, file_size)
+        print(f"Файл {filename} загружен в бакет {bucked_name} в папку пользователя {username}")
