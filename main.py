@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session ,send_file
 from UserRegistration import UserRegistration
 from connection import Backet
 
@@ -52,8 +52,6 @@ def file():
 
         print(f"name: {name}, password: {password}, file: {file.filename if file else 'нет файла'}")
 
-
-
         baket.fileup(
             bucked_name=baketName,
             username=name,
@@ -61,6 +59,19 @@ def file():
             filename=file.filename,
             file_data=file.stream,
             file_size=file.content_length
+        )
+
+        name_file = file.filename
+        fileget = baket.downloadFile(baketName, name, password, file.filename)
+        fileget.seek(0)
+        data = fileget.read()
+        print(f"Размер данных для отдачи: {len(data)}")
+        fileget.seek(0)
+
+        return send_file(
+            fileget,
+            download_name=name_file,
+            as_attachment=True
         )
 
     return render_template('filerecipient.html')
