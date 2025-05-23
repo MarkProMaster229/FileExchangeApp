@@ -27,3 +27,4 @@ class Backet:
         file_data.seek(0)
         return file_data
 
+
