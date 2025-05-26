@@ -1,17 +1,18 @@
 body {
     display: flex;
-
+    background-color: #121212;
+    color: #e0e0e0;
 
 }
 
 h1 {
-    color: darkblue;
+    color: #80aaff;
 }
 
 .header {
     width: 100%;
     padding: 10px 20px;
-    background-color: #e0e0e0;
+    background-color: #222;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -25,7 +26,8 @@ h1 {
   left: 50%;
   transform: translate(-50%, -50%);
 
-  background-color: #f0f0f0;
+  background-color: #1e1e1e;
+  color: #ddd;
   font-family: sans-serif;
   text-align: center;
   padding: 30px;
