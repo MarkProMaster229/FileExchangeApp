@@ -3,14 +3,13 @@ from minio.error import S3Error
 from io import BytesIO
 
 class Backet:
-    def __init__(self, host="127.0.0.1:9000", access_key="minioadmin", secret_key="minioadmin", secure=False):
+    def __init__(self, host="minio:9000", access_key="minioadmin", secret_key="minioadmin", secure=False):
         self.client = Minio(
             host,
             access_key=access_key,
             secret_key=secret_key,
             secure=secure
         )
-
     def fileup(self, bucked_name, username, password, filename, file_size, file_data):
         object_name = f"{username}/{password}/{filename}"
         data = file_data.read()
