@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, session ,s
 from UserRegistration import UserRegistration
 from connection import Backet
 
-app = Flask(__name__)
+
 store = UserRegistration()
-from flask import Flask, render_template, request, redirect, url_for, session
+
 
 app = Flask(__name__)
 app.secret_key = 'секретный_ключ'
@@ -36,19 +36,22 @@ def start():
 
     return render_template('index.html')
 
+baket = Backet()
+baketName = "mybucket"
 
 @app.route('/filerecipient', methods=['GET', 'POST'])
 def file():
-    baket = Backet()
-    baketName = "mybucket"
+    global baket
+    global baketName
 
+    name = session.get('name')
+    password = session.get('password')
     file = None
 
     if request.method == 'POST':
         file = request.files.get('file')
 
-        name = session.get('name')
-        password = session.get('password')
+
 
         print(f"name: {name}, password: {password}, file: {file.filename if file else 'нет файла'}")
 
@@ -75,8 +78,36 @@ def file():
             as_attachment=True
         )
 
-    return render_template('filerecipient.html')
+    people = f"{name}/{password}/"
+
+    info = baket.scannerFiles(baketName, prefix=people)
+    print("INFO:", info)
+
+
+    prefix_length = len(people)
+    files = [f['name'][prefix_length:] for f in info if f['name'].startswith(people)]
+
+    return render_template('filerecipient.html', files=files)
+
+@app.route('/download/<path:filename>')
+def download_file(filename):
+    global baket
+    global baketName
+    name = session.get('name')
+    password = session.get('password')
+
+    if not name or not password:
+        return "Пользователь не авторизован", 401
+
+    file_data = baket.downloadFile(baketName, name, password, filename)
+    file_data.seek(0)
+    return send_file(
+        file_data,
+        download_name=filename,
+        as_attachment=True
+    )
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+

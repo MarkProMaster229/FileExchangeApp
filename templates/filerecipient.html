@@ -21,21 +21,6 @@
             </form>
 
 
-        {% if files %}
-            <h2>Загруженные файлы</h2>
-            <ul class="file-list">
-                {% for file in files %}
-                    <li>
-                        {{ file }}
-                        <a href="{{ url_for('download_file', filename=file) }}" target="_blank">Скачать</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Пока нет загруженных файлов</p>
-        {% endif %}
-
-    </div>
 <div class="viewFiles">
     <h2>Ваши файлы</h2>
     <ul class="file-list-scrollable">
@@ -44,9 +29,12 @@
                 {{ file }}
                 <a href="{{ url_for('download_file', filename=file) }}" target="_blank">Скачать</a>
             </li>
+        {% else %}
+            <li>Файлы не найдены</li>
         {% endfor %}
     </ul>
 </div>
+
 
 
 </div>
