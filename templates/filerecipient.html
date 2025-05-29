@@ -26,8 +26,10 @@
     <ul class="file-list-scrollable">
         {% for file in files %}
             <li>
-                {{ file }}
-                <a href="{{ url_for('download_file', filename=file) }}" target="_blank">Скачать</a>
+                {{ file.name }}
+            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank">
+                Скачать ({{ file.size }} MB)
+            </a>
             </li>
         {% else %}
             <li>Файлы не найдены</li>

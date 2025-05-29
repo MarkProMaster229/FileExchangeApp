@@ -66,26 +66,25 @@ def file():
 
 
         name_file = file.filename
-        fileget = baket.downloadFile(baketName, name, password, file.filename)
-        fileget.seek(0)
-        data = fileget.read()
-        print(f"Размер данных для отдачи: {len(data)}")
-        fileget.seek(0)
 
-        return send_file(
-            fileget,
-            download_name=name_file,
-            as_attachment=True
-        )
 
     people = f"{name}/{password}/"
 
     info = baket.scannerFiles(baketName, prefix=people)
-    print("INFO:", info)
-
+    size = info[0]['size']#плохое значение в байтах(
+    megabytes = size / (1024 * 1024)#хорошее значениев мегабайтах)
+    print(round(megabytes, 1))#избыточнотест
+    print(size)#избыточнотест
+    print("INFO:", info)#избыточнотест
 
     prefix_length = len(people)
-    files = [f['name'][prefix_length:] for f in info if f['name'].startswith(people)]
+    files = [
+        {
+            'name': f['name'][prefix_length:],
+            'size': round(f['size'] / (1024 * 1024), 1)
+        }
+        for f in info if f['name'].startswith(people)
+    ]
 
     return render_template('filerecipient.html', files=files)
 
