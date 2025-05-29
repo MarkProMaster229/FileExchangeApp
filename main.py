@@ -53,7 +53,7 @@ def file():
 
 
 
-        print(f"name: {name}, password: {password}, file: {file.filename if file else 'нет файла'}")
+        print(f"name: {name}, password: {password}, file: {file.filename if file else 'нет файла'}")#избыточнотест
 
         baket.fileup(
             bucked_name=baketName,

@@ -7,41 +7,35 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='osnova.css') }}">
 </head>
 <body>
-<div class = "container">
-    <div class = "header">
-        <img src="{{ url_for('static', filename='Newimg/logo.png') }}">
-        <h1>Lumo</h1>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='Newimg/logo.png') }}">
+            <h1>Lumo</h1>
+        </div>
 
-    </div>
-
-    <div class="filesDowload">
-           <form class="upload-form" method="POST" enctype="multipart/form-data">
-               <input type="file" name="file">
-               <button type="submit">Загрузить</button>
+        <div class="filesDowload">
+            <form class="upload-form" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file">
+                <button type="submit">Загрузить</button>
             </form>
 
+            <div class="viewFiles">
+                <h2>Ваши файлы</h2>
+                <ul class="file-list-scrollable">
+                    {% for file in files %}
+                        <li>
+                            {{ file.name }}
+                            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank">
+                                Скачать ({{ file.size }} MB)
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>Файлы не найдены</li>
+                    {% endfor %}
+                </ul>
+            </div>
 
-<div class="viewFiles">
-    <h2>Ваши файлы</h2>
-    <ul class="file-list-scrollable">
-        {% for file in files %}
-            <li>
-                {{ file.name }}
-            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank">
-                Скачать ({{ file.size }} MB)
-            </a>
-            </li>
-        {% else %}
-            <li>Файлы не найдены</li>
-        {% endfor %}
-    </ul>
-</div>
-
-
-
-</div>
-
-
-
+        </div>
+    </div>
 </body>
 </html>
