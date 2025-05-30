@@ -21,7 +21,7 @@ class Backet:
             secure=secure
         )
     def fileup(self, bucked_name, username, password, filename, file_size, file_data):
-        object_name = f"{username}/{password}/{filename}"
+        object_name = f"{username}/{password}/{filename}"#использовать пароль как уникальный код юзера не лучшее решение
         if file_size is None or file_size == 0:
             pos = file_data.tell()
             file_data.seek(0, 2)  # в конец
