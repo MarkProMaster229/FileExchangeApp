@@ -21,11 +21,16 @@ class Backet:
             secure=secure
         )
     def fileup(self, bucked_name, username, password, filename, file_size, file_data):
-        object_name = f"{username}/{password}/{filename}"#использовать пароль как уникальный код юзера не лучшее решение
-        data = file_data.read()
-        bytes_io = BytesIO(data)
-        self.client.put_object(bucked_name, object_name, bytes_io, len(data))
-        print(f"Файл {filename} загружен в бакет {bucked_name} в папку пользователя {username} размер {len(data)}")#избыточнотест
+        object_name = f"{username}/{password}/{filename}"
+        if file_size is None or file_size == 0:
+            pos = file_data.tell()
+            file_data.seek(0, 2)  # в конец
+            file_size = file_data.tell()
+            file_data.seek(pos)  # вернуть на исходную позицию
+        file_data.seek(0)
+        print(f"Загружаем файл {filename} размером {file_size} байт")
+        self.client.put_object(bucked_name, object_name, file_data, file_size)
+        print(f"Файл {filename} загружен в бакет {bucked_name} в папку пользователя {username} размер {file_size}")
 
     def downloadFile(self, bucket_name, username, password, filename):
         object_name = f"{username}/{password}/{filename}"#наверно, лучше бы быть ему глобальным

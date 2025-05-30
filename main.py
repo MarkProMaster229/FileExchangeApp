@@ -71,6 +71,10 @@ def file():
     people = f"{name}/{password}/"
 
     info = baket.scannerFiles(baketName, prefix=people)
+    if not info:
+        print("Файлы не найдены у пользователя.")
+        files = []
+        return render_template('filerecipient.html', files=files)
     size = info[0]['size']#плохое значение в байтах(
     megabytes = size / (1024 * 1024)#хорошее значениев мегабайтах)
     print(round(megabytes, 1))#избыточнотест
