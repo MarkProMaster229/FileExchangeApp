@@ -47,15 +47,14 @@ def file():
     name = session.get('name')
     password = session.get('password')
     file = None
+    show_alert = False
 
     if request.method == 'POST':
         file = request.files.get('file')
 
-
-
         print(f"name: {name}, password: {password}, file: {file.filename if file else 'нет файла'}")#избыточнотест
 
-        baket.fileup(
+        result = baket.fileup(
             bucked_name=baketName,
             username=name,
             password=password,
@@ -63,10 +62,10 @@ def file():
             file_data=file.stream,
             file_size=file.content_length
         )
-
+        if result == 1:
+            show_alert = True
 
         name_file = file.filename
-
 
     people = f"{name}/{password}/"
 
@@ -89,8 +88,9 @@ def file():
         }
         for f in info if f['name'].startswith(people)
     ]
+    polise = baket.police(baketName,name, password)
 
-    return render_template('filerecipient.html', files=files)
+    return render_template('filerecipient.html', files=files, polise=polise, show_alert=show_alert)
 
 @app.route('/download/<path:filename>')
 def download_file(filename):

@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='osnova.css') }}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lumo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='osnova.css') }}" />
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="{{ url_for('static', filename='Newimg/logo.png') }}">
+            <img src="{{ url_for('static', filename='Newimg/logo.png') }}" alt="Logo" />
             <h1>Lumo</h1>
         </div>
 
         <div class="filesDowload">
             <form class="upload-form" method="POST" enctype="multipart/form-data">
-                <input type="file" name="file">
-                <button type="submit">Загрузить</button>
+                <input type="file" name="file" />
+                <button type="submit" {% if polise == 1 %}disabled{% endif %}>Загрузить</button>
             </form>
 
             <div class="viewFiles">
@@ -34,8 +34,13 @@
                     {% endfor %}
                 </ul>
             </div>
-
         </div>
     </div>
+
+    {% if show_alert %}
+    <script>
+        alert("Файл слишком большой! Максимум 10 ГБ.");
+    </script>
+    {% endif %}
 </body>
 </html>

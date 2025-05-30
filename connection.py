@@ -20,17 +20,24 @@ class Backet:
             secret_key=secret_key,
             secure=secure
         )
+
     def fileup(self, bucked_name, username, password, filename, file_size, file_data):
-        object_name = f"{username}/{password}/{filename}"#использовать пароль как уникальный код юзера не лучшее решение
+        object_name = f"{username}/{password}/{filename}"
         if file_size is None or file_size == 0:
             pos = file_data.tell()
             file_data.seek(0, 2)  # в конец
             file_size = file_data.tell()
-            file_data.seek(pos)  # вернуть на исходную позицию
+            file_data.seek(pos)
         file_data.seek(0)
         print(f"Загружаем файл {filename} размером {file_size} байт")
+        current_size = self.police(bucked_name, username, password)  # размер уже загруженных файлов
+        limit = 10_737_418_240  # 10 гигабайт в байтах
+        if current_size + file_size > limit:
+            print("Превышен общий лимит на пользователя")
+            return 1
         self.client.put_object(bucked_name, object_name, file_data, file_size)
         print(f"Файл {filename} загружен в бакет {bucked_name} в папку пользователя {username} размер {file_size}")
+        return 0
 
     def downloadFile(self, bucket_name, username, password, filename):
         object_name = f"{username}/{password}/{filename}"#наверно, лучше бы быть ему глобальным
@@ -53,6 +60,22 @@ class Backet:
         except S3Error as e:
             print(f"Ошибка при получении списка объектов: {e}")
         return files
+    #после последнего обновления, мне стало страшно, раньше пользователя
+    #физчески держало кол-во озу сервера, теперь юзер может загрузить очень большие данные
+    #для этого нужно разработать меры ограничения 10гигабайт я думаю как верхний лимит на пользователя
+    def police(self, bucket_name, username, password):
+        size = 0
+        breakPointFile = 0
+        folder_name = f"{username}/{password}/"
+        rider = self.client.list_objects(bucket_name,prefix=folder_name,recursive=True)
+        for obj in rider:
+            size += obj.size
+
+        if size > 10_737_418_240:
+            breakPointFile = 1
+            print("отладка-предел-стоп")
+
+        return breakPointFile
 
 
 
