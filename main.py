@@ -28,7 +28,6 @@ def start():
                 return redirect(url_for('file'))
             else:
                 print("Пользователь существует, но пароль не совпадает")
-                print("кинуть в регистрацию")
                 return render_template('index.html', error="Пользователь или пароль не верны")
         else:
             print("Пользователь не найден — перенаправляем на регистрацию")
