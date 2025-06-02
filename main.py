@@ -52,6 +52,8 @@ def reg():
             success = store.add_user(name, password)
             if success:
                 print("Новый пользователь зарегистрирован")
+                session['name'] = name
+                session['password'] = password
                 return redirect(url_for('file'))
             else:
                 return render_template('registration.html', error="Ошибка регистрации")
