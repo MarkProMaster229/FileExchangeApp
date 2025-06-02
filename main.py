@@ -35,6 +35,11 @@ def start():
         return render_template('index.html', name=name, password=password)
 
     return render_template('index.html')
+@app.route('/registration',methods=['GET', 'POST'])
+def reg():
+
+
+    return render_template('registration.html')
 
 baket = Backet()
 baketName = "mybucket"
