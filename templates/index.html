@@ -24,8 +24,19 @@
     <div class = registration>
         <h4>еще нет аккаунта?</h4>
         <h4>жми сюда - </h4>
-        <div class = "buttonReg" ><button type ="submit"> Зарегистрироваться </button> </div>
 
+    <div class="buttonReg">
+        <a href="{{ url_for('reg') }}">
+            <button type="button">Зарегистрироваться</button>
+        </a>
+    </div>
+    <div class ="error">
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    </div>
 
     </div>
 </div>
