@@ -156,5 +156,6 @@ def delete_file(filename):
 
 
 if __name__ == '__main__':
+    baket.start_cleaning_thread(baketName)
     app.run(debug=True)
 

@@ -1,7 +1,12 @@
+import threading
+
 from minio import Minio
 from minio.error import S3Error
 from io import BytesIO
-
+import time
+import schedule
+import time
+from datetime import datetime, timedelta
 # def __init__(self, host="minio:9000", access_key="minioadmin", secret_key="minioadmin", secure=False):
 # self.client = Minio(
 # host,
@@ -87,6 +92,21 @@ class Backet:
             print(f"Ошибка при удалении файла: {e}")
             return False
 
+    def deletedAll(self, bucket_name):
+        print(f"[{datetime.now()}]полное удаление всех файлов в бакете {bucket_name}")
+        objectDell = self.client.list_objects(bucket_name, recursive=True)
+        for obj in objectDell:
+            self.client.remove_object(bucket_name, obj.object_name)
+            print(f"Удалён файл {obj.object_name}")
+        print("Полное удаление завершено.")
 
+    def clean(self, bucket_name):
+        schedule.every().day.at("01:00").do(self.deletedAll, bucket_name=bucket_name)
+        print(f"[{datetime.now()}] Планировщик запущен. Удаление каждый день в 01:00.")
+        while True:
+            schedule.run_pending()
+            time.sleep(30)
 
-
+    def start_cleaning_thread(self, bucket_name):
+        thread = threading.Thread(target=self.clean, args=(bucket_name,), daemon=True)
+        thread.start()
