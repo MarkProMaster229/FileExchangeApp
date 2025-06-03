@@ -77,5 +77,16 @@ class Backet:
 
         return breakPointFile
 
+    def deletedFiles(self, bucket_name, username, password, filename):
+        object_name = f"{username}/{password}/{filename}"
+        try:
+            self.client.remove_object(bucket_name, object_name)
+            print(f"Файл {object_name} удалён.")
+            return True
+        except S3Error as e:
+            print(f"Ошибка при удалении файла: {e}")
+            return False
+
+
 
 

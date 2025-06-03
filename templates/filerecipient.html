@@ -24,10 +24,11 @@
                 <ul class="file-list-scrollable">
                     {% for file in files %}
                         <li>
-                            {{ file.name }}
-                            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank">
-                                Скачать ({{ file.size }} MB)
-                            </a>
+                            <form action="{{ url_for('delete_file', filename=file.name) }}" method="post" class="delete-form">
+                                <button type="submit" class="delete-button">×</button>
+                            </form>
+                            <span class="file-name">{{ file.name }}</span>
+                            <span class="file-size">{{ file.size }} MB</span>
                         </li>
                     {% else %}
                         <li>Файлы не найдены</li>

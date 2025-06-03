@@ -135,6 +135,25 @@ def download_file(filename):
         as_attachment=True
     )
 
+@app.route('/delete/<path:filename>', methods=['POST'])
+def delete_file(filename):
+    global baket
+    global baketName
+
+    name = session.get('name')
+    password = session.get('password')
+
+    if not name or not password:
+        return "Не авторизован", 401
+
+    success = baket.deletedFiles(baketName, name, password, filename)
+    if success:
+        print(f"Файл {filename} удалён")
+    else:
+        print(f"Не удалось удалить файл {filename}")
+
+    return redirect(url_for('file'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
