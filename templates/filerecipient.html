@@ -21,19 +21,24 @@
 
             <div class="viewFiles">
                 <h2>Ваши файлы</h2>
-                <ul class="file-list-scrollable">
-                    {% for file in files %}
-                        <li>
-                            <form action="{{ url_for('delete_file', filename=file.name) }}" method="post" class="delete-form">
-                                <button type="submit" class="delete-button">×</button>
-                            </form>
-                            <span class="file-name">{{ file.name }}</span>
-                            <span class="file-size">{{ file.size }} MB</span>
-                        </li>
-                    {% else %}
-                        <li>Файлы не найдены</li>
-                    {% endfor %}
-                </ul>
+<ul class="file-list-scrollable">
+    {% for file in files %}
+        <li>
+            <form action="{{ url_for('delete_file', filename=file.name) }}" method="post" class="delete-form">
+                <button type="submit" class="delete-button">×</button>
+            </form>
+            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="file-name">
+                {{ file.name }}
+            </a>
+            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="button-green">
+                Скачать ({{ file.size }} MB)
+            </a>
+        </li>
+    {% else %}
+        <li>Файлы не найдены</li>
+    {% endfor %}
+</ul>
+
             </div>
         </div>
     </div>

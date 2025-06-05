@@ -167,13 +167,78 @@ body {
     color: #ddd;
 }
 
-.file-list-scrollable li a {
+.file-list-scrollable li a.file-name {
     color: #60a5fa;
     text-decoration: none;
     font-weight: 600;
 }
 
+.file-list-scrollable li a.file-name:hover {
+    text-decoration: underline;
+}
+
+
+.button-green {
+    padding: 2px 6px;
+    background-color: #4CAF50;
+    color: white !important; /* ← гарантированно белый текст */
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.9rem;
+}
+
 .file-list-scrollable li a:hover {
     text-decoration: underline;
+}
+
+.button-green {
+    padding: 2px 6px;
+    background-color: #4CAF50;       /* такой же зелёный, как у загрузки */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;           /* для <a> */
+    display: inline-block;
+    font-size: 0.9rem;
+}
+
+.button-green:hover {
+    background-color: #45a049;       /* как у .upload-form button:hover */
+}
+.file-list-scrollable li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #444;
+    font-size: 0.95rem;
+    color: #ddd;
+}
+
+.delete-form {
+    margin: 0;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    color: #ff6666;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 6px;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.delete-button:hover {
+    color: #ff3b3b;
 }
 
