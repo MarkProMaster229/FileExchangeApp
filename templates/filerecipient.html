@@ -21,25 +21,49 @@
 
             <div class="viewFiles">
                 <h2>Ваши файлы</h2>
-<ul class="file-list-scrollable">
-    {% for file in files %}
-        <li>
-            <form action="{{ url_for('delete_file', filename=file.name) }}" method="post" class="delete-form">
-                <button type="submit" class="delete-button">×</button>
-            </form>
-            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="file-name">
-                {{ file.name }}
-            </a>
-            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="button-green">
-                Скачать ({{ file.size }} MB)
-            </a>
-        </li>
-    {% else %}
-        <li>Файлы не найдены</li>
-    {% endfor %}
-</ul>
-
+                <ul class="file-list-scrollable">
+                    {% for file in files %}
+                        <li>
+                            <form action="{{ url_for('delete_file', filename=file.name) }}" method="post" class="delete-form">
+                                <button type="submit" class="delete-button">×</button>
+                            </form>
+                            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="file-name">
+                                {{ file.name }}
+                            </a>
+                            <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="button-green">
+                                Скачать ({{ file.size }} MB)
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>Файлы не найдены</li>
+                    {% endfor %}
+                </ul>
             </div>
+
+            <div class="viewFiles public">
+                <h2>Публичные файлы</h2>
+                <ul class="file-list-scrollable">
+                    {% if publicFiles %}
+                        {% for file in publicFiles %}
+                            <li>
+                                <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="file-name">
+                                    {{ file.name }}
+                                </a>
+                                <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="button-green">
+                                    Скачать ({{ file.size }} MB)
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li>Публичные файлы не найдены</li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <form class="upload-form" method="POST" enctype="multipart/form-data">
+                <input type="file" name="public_file" />
+                <button type="submit" name="public_upload">Загрузить в публичные</button>
+            </form>
         </div>
     </div>
 

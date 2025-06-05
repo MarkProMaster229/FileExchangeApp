@@ -242,3 +242,46 @@ body {
     color: #ff3b3b;
 }
 
+.publicFiles {
+    width: 250px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+    margin-top: 20px;
+    color: #ddd;
+}
+
+.publicFiles h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #ddd;
+}
+
+.publicFiles .file-list-scrollable {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.publicFiles .file-list-scrollable li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #444;
+    font-size: 0.95rem;
+    color: #ddd;
+}
+
+.publicFiles .file-list-scrollable li a.file-name {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.publicFiles .file-list-scrollable li a.file-name:hover {
+    text-decoration: underline;
+}

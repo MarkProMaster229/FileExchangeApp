@@ -110,3 +110,20 @@ class Backet:
     def start_cleaning_thread(self, bucket_name):
         thread = threading.Thread(target=self.clean, args=(bucket_name,), daemon=True)
         thread.start()
+
+    #было принято решение для того что бы пользователь смог делится своими файлами
+    #решение было принято по причине комфорта пользователя, у пользователя будут как личные так и
+    #общевственные файлы в разных бакетах соответственно
+
+    def generalFiles(self, bucked_name, username, filename, file_size, file_data):
+        object_name = f"{username}/{filename}"
+        if file_size is None or file_size == 0:
+            pos = file_data.tell()
+            file_data.seek(0, 2)  # в конец
+            file_size = file_data.tell()
+            file_data.seek(pos)
+        file_data.seek(0)
+        print(f"Загружаем файл {filename} размером {file_size} байт")
+        self.client.put_object(bucked_name, object_name, file_data, file_size)
+        print(f"Файл {filename} загружен в бакет {bucked_name} в папку пользователя {username} размер {file_size}")
+        return 0
