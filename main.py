@@ -63,11 +63,12 @@ def reg():
 
 baket = Backet()
 baketName = "mybucket"
-
+PubluckBaket = "publicbaket"
 @app.route('/filerecipient', methods=['GET', 'POST'])
 def file():
     global baket
     global baketName
+    global PubluckBaket
 
     name = session.get('name')
     password = session.get('password')
@@ -75,47 +76,59 @@ def file():
     show_alert = False
 
     if request.method == 'POST':
-        file = request.files.get('file')
+        if 'public_upload' in request.form:
+            file = request.files.get('public_file')
+            if not file or file.filename == '':
+                return render_template('filerecipient.html', files=[],
+                                       error="Пожалуйста, выберите файл для загрузки в публичные")
+
+            baket.generalFiles(            bucked_name=PubluckBaket,
+            username=name,
+            filename=file.filename,
+            file_data=file.stream,
+            file_size=file.content_length)
+
+        else:
+
+            file = request.files.get('file')
+            if not file or file.filename == '':
+                return render_template('filerecipient.html', files=[], error="Пожалуйста, выберите файл")
+            result = baket.fileup(
+                bucked_name=baketName,
+                username=name,
+                password=password,
+                filename=file.filename,
+                file_data=file.stream,
+                file_size=file.content_length
+            )
 
         print(f"name: {name}, password: {password}, file: {file.filename if file else 'нет файла'}")#избыточнотест
 
-        result = baket.fileup(
-            bucked_name=baketName,
-            username=name,
-            password=password,
-            filename=file.filename,
-            file_data=file.stream,
-            file_size=file.content_length
-        )
-        if result == 1:
-            show_alert = True
-
-        name_file = file.filename
-
-    people = f"{name}/{password}/"
-
-    info = baket.scannerFiles(baketName, prefix=people)
-    if not info:
-        print("Файлы не найдены у пользователя.")
-        files = []
-        return render_template('filerecipient.html', files=files)
-    size = info[0]['size']#плохое значение в байтах(
-    megabytes = size / (1024 * 1024)#хорошее значениев мегабайтах)
-    print(round(megabytes, 1))#избыточнотест
-    print(size)#избыточнотест
-    print("INFO:", info)#избыточнотест
-
-    prefix_length = len(people)
-    files = [
+    public_info = baket.scannerFiles(PubluckBaket, prefix=f"{name}/")
+    publicFiles = [
         {
-            'name': f['name'][prefix_length:],
+            'name': f['name'][len(name) + 1:],
             'size': round(f['size'] / (1024 * 1024), 1)
         }
-        for f in info if f['name'].startswith(people)
+        for f in public_info
     ]
+
+    people = f"{name}/{password}/"
+    info = baket.scannerFiles(baketName, prefix=people)
+    if not info:
+        files = []
+    else:
+        prefix_length = len(people)
+        files = [
+            {
+                'name': f['name'][prefix_length:],
+                'size': round(f['size'] / (1024 * 1024), 1)
+            }
+            for f in info if f['name'].startswith(people)
+        ]
     polise = baket.police(baketName,name, password)
 
-    return render_template('filerecipient.html', files=files, polise=polise, show_alert=show_alert)
+    return render_template('filerecipient.html', files=files, publicFiles=publicFiles, polise=polise, show_alert=show_alert)
 
 @app.route('/download/<path:filename>')
 def download_file(filename):
