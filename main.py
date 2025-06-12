@@ -147,6 +147,15 @@ def download_file(filename):
         download_name=filename,
         as_attachment=True
     )
+@app.route('/download/pub/<path:filename>')
+def dowload_public(filename):
+    global baket
+    global PubluckBaket
+    name = session.get('name')
+    publickRealise = baket.downloadFilePublic(PubluckBaket,name,filename)
+    publickRealise.seek(0)
+    return send_file(publickRealise, download_name=filename, as_attachment=True)
+
 
 @app.route('/delete/<path:filename>', methods=['POST'])
 def delete_file(filename):

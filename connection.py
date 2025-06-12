@@ -127,3 +127,12 @@ class Backet:
         self.client.put_object(bucked_name, object_name, file_data, file_size)
         print(f"Файл {filename} загружен в бакет {bucked_name} в папку пользователя {username} размер {file_size}")
         return 0
+
+    def downloadFilePublic(self, bucket_name, username, filename):
+        object_name = f"{username}/{filename}"#наверно, лучше бы быть ему глобальным
+        response = self.client.get_object(bucket_name, object_name)
+        file_data = BytesIO(response.read())
+        response.close()
+        response.release_conn()
+        file_data.seek(0)
+        return file_data

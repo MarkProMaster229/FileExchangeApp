@@ -46,10 +46,10 @@
                     {% if publicFiles %}
                         {% for file in publicFiles %}
                             <li>
-                                <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="file-name">
+                                <a href="{{ url_for('dowload_public', filename=file.name) }}" target="_blank" class="file-name">
                                     {{ file.name }}
                                 </a>
-                                <a href="{{ url_for('download_file', filename=file.name) }}" target="_blank" class="button-green">
+                                <a href="{{ url_for('dowload_public', filename=file.name) }}" target="_blank" class="button-green">
                                     Скачать ({{ file.size }} MB)
                                 </a>
                             </li>
