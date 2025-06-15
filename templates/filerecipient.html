@@ -122,8 +122,8 @@
     <ul class="file-list-scrollable">
         {% if publicFiles %}
             {% for file in publicFiles %}
-                <li onclick="showPublicLinkModal('{{ file.link }}')">
-                    <a href="{{ file.link }}" target="_blank" class="file-name">
+                <li>
+                    <a href="#" class="file-name" onclick="showPublicLinkModal('{{ file.link }}'); return false;">
                         {{ file.name }}
                     </a>
                     <a href="{{ file.link }}" target="_blank" class="button-green">
@@ -136,6 +136,7 @@
         {% endif %}
     </ul>
 </div>
+
 
 
             <form class="upload-form" method="POST" enctype="multipart/form-data">

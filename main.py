@@ -89,7 +89,14 @@ def file():
             file_data=file.stream,
             file_size=file.content_length,
             token=token)
-            public_link = url_for('download_shared', token=token, filename=file.filename, _external=True)
+            public_link = url_for(
+                'download_shared',
+                username=name,
+                token=token,
+                filename=file.filename,
+                _external=True
+            )
+
 
         else:
 
@@ -112,8 +119,13 @@ def file():
         {
             'name': f['name'].split('/')[-1],
             'size': round(f['size'] / (1024 * 1024), 1),
-            'link': url_for('download_shared', token=f['name'].split('/')[1], filename=f['name'].split('/')[-1],
-                            _external=True)
+            'link': url_for(
+                'download_shared',
+                username=name,
+                token=f['name'].split('/')[1],
+                filename=f['name'].split('/')[-1],
+                _external=True
+            )
         }
         for f in public_info
     ]
@@ -169,17 +181,20 @@ def dowload_public(filename):
     publickRealise.seek(0)
     return send_file(publickRealise, download_name=filename, as_attachment=True)
 
-@app.route('/shared/<token>/<path:filename>')
-def download_shared(token, filename):
-    global baket
-    global PubluckBaket
-
+@app.route('/shared/<username>/<token>/<path:filename>')
+def download_shared(username, token, filename):
     try:
-        file_data = baket.downloadFilePublic(PubluckBaket, username="*", filename=filename, token=token)
+        file_data = baket.downloadFilePublic(
+            PubluckBaket,
+            username=username,
+            filename=filename,
+            token=token
+        )
         return send_file(file_data, as_attachment=True, download_name=filename)
     except Exception as e:
         print(e)
         return "Файл не найден или срок действия истёк", 404
+
 
 
 
