@@ -76,17 +76,20 @@ def file():
     show_alert = False
 
     if request.method == 'POST':
+        public_link = None
         if 'public_upload' in request.form:
             file = request.files.get('public_file')
             if not file or file.filename == '':
                 return render_template('filerecipient.html', files=[],
                                        error="Пожалуйста, выберите файл для загрузки в публичные")
-
+            token = baket.generate_token()
             baket.generalFiles(            bucked_name=PubluckBaket,
             username=name,
             filename=file.filename,
             file_data=file.stream,
-            file_size=file.content_length)
+            file_size=file.content_length,
+            token=token)
+            public_link = url_for('download_shared', token=token, filename=file.filename, _external=True)
 
         else:
 
@@ -107,8 +110,10 @@ def file():
     public_info = baket.scannerFiles(PubluckBaket, prefix=f"{name}/")
     publicFiles = [
         {
-            'name': f['name'][len(name) + 1:],
-            'size': round(f['size'] / (1024 * 1024), 1)
+            'name': f['name'].split('/')[-1],  # только имя файла, без токена
+            'size': round(f['size'] / (1024 * 1024), 1),
+            'link': url_for('download_shared', token=f['name'].split('/')[1], filename=f['name'].split('/')[-1],
+                            _external=True)
         }
         for f in public_info
     ]
@@ -128,7 +133,15 @@ def file():
         ]
     polise = baket.police(baketName,name, password)
 
-    return render_template('filerecipient.html', files=files, publicFiles=publicFiles, polise=polise, show_alert=show_alert)
+    return render_template(
+        'filerecipient.html',
+        files=files,
+        publicFiles=publicFiles,
+        polise=polise,
+        show_alert=show_alert,
+        public_link=public_link
+    )
+
 
 @app.route('/download/<path:filename>')
 def download_file(filename):
@@ -156,6 +169,19 @@ def dowload_public(filename):
     publickRealise.seek(0)
     return send_file(publickRealise, download_name=filename, as_attachment=True)
 
+@app.route('/shared/<token>/<path:filename>')
+def download_shared(token, filename):
+    global baket
+    global PubluckBaket
+
+    try:
+        file_data = baket.downloadFilePublic(PubluckBaket, username="*", filename=filename, token=token)
+        return send_file(file_data, as_attachment=True, download_name=filename)
+    except Exception as e:
+        print(e)
+        return "Файл не найден или срок действия истёк", 404
+
+
 
 @app.route('/delete/<path:filename>', methods=['POST'])
 def delete_file(filename):
@@ -175,6 +201,7 @@ def delete_file(filename):
         print(f"Не удалось удалить файл {filename}")
 
     return redirect(url_for('file'))
+
 
 
 if __name__ == '__main__':

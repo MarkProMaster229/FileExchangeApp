@@ -1,5 +1,5 @@
 import threading
-
+import uuid
 from minio import Minio
 from minio.error import S3Error
 from io import BytesIO
@@ -115,8 +115,8 @@ class Backet:
     #решение было принято по причине комфорта пользователя, у пользователя будут как личные так и
     #общевственные файлы в разных бакетах соответственно
 
-    def generalFiles(self, bucked_name, username, filename, file_size, file_data):
-        object_name = f"{username}/{filename}"
+    def generalFiles(self, bucked_name, username, filename, file_size, file_data, token):
+        object_name = f"{username}/{token}/{filename}"
         if file_size is None or file_size == 0:
             pos = file_data.tell()
             file_data.seek(0, 2)  # в конец
@@ -128,11 +128,14 @@ class Backet:
         print(f"Файл {filename} загружен в бакет {bucked_name} в папку пользователя {username} размер {file_size}")
         return 0
 
-    def downloadFilePublic(self, bucket_name, username, filename):
-        object_name = f"{username}/{filename}"#наверно, лучше бы быть ему глобальным
+    def downloadFilePublic(self, bucket_name, username, filename,token):
+        object_name = f"{username}/{token}/{filename}"
         response = self.client.get_object(bucket_name, object_name)
         file_data = BytesIO(response.read())
         response.close()
         response.release_conn()
         file_data.seek(0)
         return file_data
+
+    def generate_token(self):
+        return uuid.uuid4().hex
