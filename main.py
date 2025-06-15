@@ -74,9 +74,9 @@ def file():
     password = session.get('password')
     file = None
     show_alert = False
+    public_link = None
 
     if request.method == 'POST':
-        public_link = None
         if 'public_upload' in request.form:
             file = request.files.get('public_file')
             if not file or file.filename == '':
@@ -110,7 +110,7 @@ def file():
     public_info = baket.scannerFiles(PubluckBaket, prefix=f"{name}/")
     publicFiles = [
         {
-            'name': f['name'].split('/')[-1],  # только имя файла, без токена
+            'name': f['name'].split('/')[-1],
             'size': round(f['size'] / (1024 * 1024), 1),
             'link': url_for('download_shared', token=f['name'].split('/')[1], filename=f['name'].split('/')[-1],
                             _external=True)
