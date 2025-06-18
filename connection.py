@@ -7,6 +7,7 @@ import time
 import schedule
 import time
 from datetime import datetime, timedelta
+import os
 # def __init__(self, host="minio:9000", access_key="minioadmin", secret_key="minioadmin", secure=False):
 # self.client = Minio(
 # host,
@@ -20,12 +21,15 @@ class Backet:
     def __init__(self, host="127.0.0.1:9000", access_key="minioadmin", secret_key="minioadmin", secure=False):#временное решение миниио работает локально в контейнере
         #в докер компасе есть часть для работы с мимниио предоставлю - выше там предусмотрена локально работа меж контейнерами
         self.client = Minio(
-            host,
-            access_key=access_key,
-            secret_key=secret_key,
-            secure=secure
+            os.environ.get("MINIO_HOST", "localhost:9000"),
+            access_key=os.environ.get("MINIO_ROOT_USER", "minioadmin"),
+            secret_key=os.environ.get("MINIO_ROOT_PASSWORD", "minioadmin"),
+            secure=False
         )
-
+        for bucket in ["mybucket", "publicbaket"]:
+            if not self.client.bucket_exists(bucket):
+                self.client.make_bucket(bucket)
+                print(f"Создан бакет: {bucket}")
     def fileup(self, bucked_name, username, password, filename, file_size, file_data):
         object_name = f"{username}/{password}/{filename}"
         if file_size is None or file_size == 0:
