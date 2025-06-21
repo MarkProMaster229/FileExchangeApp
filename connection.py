@@ -18,8 +18,7 @@ import os
 
 class Backet:
 
-    def __init__(self, host="127.0.0.1:9000", access_key="minioadmin", secret_key="minioadmin", secure=False):#временное решение миниио работает локально в контейнере
-        #в докер компасе есть часть для работы с мимниио предоставлю - выше там предусмотрена локально работа меж контейнерами
+    def __init__(self, host="127.0.0.1:9000", access_key="minioadmin", secret_key="minioadmin", secure=False):
         self.client = Minio(
             os.environ.get("MINIO_HOST", "localhost:9000"),
             access_key=os.environ.get("MINIO_ROOT_USER", "minioadmin"),
@@ -69,9 +68,7 @@ class Backet:
         except S3Error as e:
             print(f"Ошибка при получении списка объектов: {e}")
         return files
-    #после последнего обновления, мне стало страшно, раньше пользователя
-    #физчески держало кол-во озу сервера, теперь юзер может загрузить очень большие данные
-    #для этого нужно разработать меры ограничения 10гигабайт я думаю как верхний лимит на пользователя
+    #меры ограничения 10гигабайт как верхний лимит на пользователя
     def police(self, bucket_name, username, password):
         size = 0
         breakPointFile = 0
