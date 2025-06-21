@@ -6,47 +6,6 @@
     <title>Lumo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='osnova.css') }}" />
 </head>
-{% if public_link %}
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span class="close-button" onclick="closeModal()">&times;</span>
-    <h2>Ссылка на файл</h2>
-    <input type="text" id="shareLink" readonly>
-    <button onclick="copyLink()">Скопировать</button>
-  </div>
-</div>
-
-<script>
-  function closeModal() {
-    document.getElementById("modal").style.display = "none";
-  }
-
-  function copyLink() {
-    var copyText = document.getElementById("shareLink");
-    copyText.select();
-    document.execCommand("copy");
-    alert("Ссылка скопирована!");
-  }
-
-  function showPublicLinkModal(link) {
-    var modal = document.getElementById("modal");
-    var linkInput = document.getElementById("shareLink");
-    linkInput.value = link;
-    modal.style.display = "block";
-  }
-
-  // Открытие по загрузке — если есть public_link
-  {% if public_link %}
-  document.addEventListener("DOMContentLoaded", function () {
-    showPublicLinkModal("{{ public_link }}");
-  });
-  {% endif %}
-</script>
-
-<style>
-
-</style>
-{% endif %}
 <body>
     <div class="container">
         <div class="header">
@@ -62,7 +21,6 @@
                     Загрузить
                 </button>
             </form>
-
 
             <div class="viewFiles">
                 <h2>Ваши файлы</h2>
@@ -85,7 +43,6 @@
                 </ul>
             </div>
 
-
             <div class="viewFiles public">
                 <h2>Публичные файлы</h2>
                 <ul class="file-list-scrollable">
@@ -106,13 +63,47 @@
                 </ul>
             </div>
 
-
             <form class="upload-form" method="POST" enctype="multipart/form-data">
                 <input type="file" name="public_file" />
                 <button type="submit" name="public_upload">Загрузить в публичные</button>
             </form>
         </div>
     </div>
+
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2>Ссылка на файл</h2>
+            <input type="text" id="shareLink" readonly>
+            <button onclick="copyLink()">Скопировать</button>
+        </div>
+    </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function copyLink() {
+            var copyText = document.getElementById("shareLink");
+            copyText.select();
+            document.execCommand("copy");
+            alert("Ссылка скопирована!");
+        }
+
+        function showPublicLinkModal(link) {
+            var modal = document.getElementById("modal");
+            var linkInput = document.getElementById("shareLink");
+            linkInput.value = link;
+            modal.style.display = "block";
+        }
+
+        {% if public_link %}
+        document.addEventListener("DOMContentLoaded", function () {
+            showPublicLinkModal("{{ public_link }}");
+        });
+        {% endif %}
+    </script>
 
     {% if show_alert %}
     <script>
@@ -121,4 +112,3 @@
     {% endif %}
 </body>
 </html>
-
