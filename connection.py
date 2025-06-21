@@ -105,7 +105,7 @@ class Backet:
         print("Полное удаление завершено.")
 
     def clean(self, bucket_name):
-        schedule.every().day.at("01:00").do(self.deletedAll, bucket_name=bucket_name)
+        schedule.every().day.at("19:16").do(self.deletedAll, bucket_name=bucket_name)
         print(f"[{datetime.now()}] Планировщик запущен. Удаление каждый день в 01:00.")
         while True:
             schedule.run_pending()

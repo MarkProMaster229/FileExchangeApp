@@ -82,7 +82,6 @@
   }
 </style>
 {% endif %}
-
 <body>
     <div class="container">
         <div class="header">
@@ -91,10 +90,14 @@
         </div>
 
         <div class="filesDowload">
+
             <form class="upload-form" method="POST" enctype="multipart/form-data">
                 <input type="file" name="file" />
-                <button type="submit" {% if polise == 1 %}disabled{% endif %}>Загрузить</button>
+                <button type="submit" name="private_upload" {% if polise == 1 %}disabled{% endif %}>
+                    Загрузить
+                </button>
             </form>
+
 
             <div class="viewFiles">
                 <h2>Ваши файлы</h2>
@@ -117,26 +120,26 @@
                 </ul>
             </div>
 
-            <div class="viewFiles public">
-    <h2>Публичные файлы</h2>
-    <ul class="file-list-scrollable">
-        {% if publicFiles %}
-            {% for file in publicFiles %}
-                <li>
-                    <a href="#" class="file-name" onclick="showPublicLinkModal('{{ file.link }}'); return false;">
-                        {{ file.name }}
-                    </a>
-                    <a href="{{ file.link }}" target="_blank" class="button-green">
-                        Скачать ({{ file.size }} MB)
-                    </a>
-                </li>
-            {% endfor %}
-        {% else %}
-            <li>Публичные файлы не найдены</li>
-        {% endif %}
-    </ul>
-</div>
 
+            <div class="viewFiles public">
+                <h2>Публичные файлы</h2>
+                <ul class="file-list-scrollable">
+                    {% if publicFiles %}
+                        {% for file in publicFiles %}
+                            <li>
+                                <a href="#" class="file-name" onclick="showPublicLinkModal('{{ file.link }}'); return false;">
+                                    {{ file.name }}
+                                </a>
+                                <a href="{{ file.link }}" target="_blank" class="button-green">
+                                    Скачать ({{ file.size }} MB)
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li>Публичные файлы не найдены</li>
+                    {% endif %}
+                </ul>
+            </div>
 
 
             <form class="upload-form" method="POST" enctype="multipart/form-data">
@@ -153,3 +156,4 @@
     {% endif %}
 </body>
 </html>
+

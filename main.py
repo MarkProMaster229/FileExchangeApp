@@ -79,23 +79,38 @@ def file():
     if request.method == 'POST':
         if 'public_upload' in request.form:
             file = request.files.get('public_file')
-            if not file or file.filename == '':
-                return render_template('filerecipient.html', files=[],
-                                       error="Пожалуйста, выберите файл для загрузки в публичные")
-            token = baket.generate_token()
-            baket.generalFiles(            bucked_name=PubluckBaket,
-            username=name,
-            filename=file.filename,
-            file_data=file.stream,
-            file_size=file.content_length,
-            token=token)
-            public_link = url_for(
-                'download_shared',
-                username=name,
-                token=token,
-                filename=file.filename,
-                _external=True
-            )
+            if file and file.filename != '':
+                token = baket.generate_token()
+                baket.generalFiles(
+                    bucked_name=PubluckBaket,
+                    username=name,
+                    filename=file.filename,
+                    file_data=file.stream,
+                    file_size=file.content_length,
+                    token=token
+                )
+                session['public_link'] = url_for(
+                    'download_shared',
+                    username=name,
+                    token=token,
+                    filename=file.filename,
+                    _external=True
+                )
+                return redirect(url_for('file'))
+
+        elif 'private_upload' in request.form:
+            file = request.files.get('file')
+            if file and file.filename != '':
+                baket.fileup(
+                    bucked_name=baketName,
+                    username=name,
+                    password=password,
+                    filename=file.filename,
+                    file_data=file.stream,
+                    file_size=file.content_length
+                )
+                return redirect(url_for('file'))
+
 
 
         else:
@@ -144,6 +159,7 @@ def file():
             for f in info if f['name'].startswith(people)
         ]
     polise = baket.police(baketName,name, password)
+    public_link = session.pop('public_link', None)
 
     return render_template(
         'filerecipient.html',
@@ -153,6 +169,7 @@ def file():
         show_alert=show_alert,
         public_link=public_link
     )
+
 
 
 @app.route('/download/<path:filename>')
@@ -221,5 +238,6 @@ def delete_file(filename):
 
 if __name__ == '__main__':
     baket.start_cleaning_thread(baketName)
+    baket.start_cleaning_thread("publicbaket")
     app.run(debug=True)
 
