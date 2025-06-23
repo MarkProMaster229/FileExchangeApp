@@ -28,7 +28,7 @@
 
 1. **Клонируйте репозиторий**:
    ```bash
-   git clone <https://github.com/MarkProMaster229/FileExchangeApp.git>
+   git clone https://github.com/MarkProMaster229/FileExchangeApp.git
    ```
 
 
